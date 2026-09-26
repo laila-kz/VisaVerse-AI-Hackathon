@@ -1,5 +1,9 @@
 # VisaVerse AI Hackathon
 
+<p align="center">
+  <img src="./public/front-end.png" alt="VisaVerse front-end interface" width="900" />
+</p>
+
 VisaVerse is an AI-assisted visa application workflow built with React, TypeScript, Vite, and Node.js. The app allows a user to upload a visa PDF or document image, run OCR, extract form fields with an AI layer, autofill values from a saved profile, and generate a completed PDF for download.
 
 This project is designed as a practical end-to-end workflow for document understanding and form completion rather than a generic demo. It focuses on a real user journey: detect form fields, interpret OCR text, combine it with profile data, and produce a corrected document.

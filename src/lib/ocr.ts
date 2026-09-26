@@ -31,23 +31,15 @@ export interface OcrResult {
 
 
 
-import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf";  //use legacy ES build compatible with Vite
-import {createWorker } from "tesseract.js";
-import Worker from "tesseract.js";
+import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf";
+import { createWorker } from "tesseract.js";
 
-// Configure PDF.js worker
-// Set PDF.js worker source using the library version (cast to any for TS)
 (pdfjsLib as any).GlobalWorkerOptions.workerSrc =
   `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${(pdfjsLib as any).version}/pdf.worker.min.js`;
-// OCR for IMAGES
-// --------------------
 
 async function runImageOcr(imageInput: File | HTMLImageElement): Promise<OcrPageResult> {
-  const worker: Worker = await createWorker({ logger: () => {} });
+  const worker: any = await createWorker("eng");
 
-
-  await worker.loadLanguage("eng");
-  await worker.initialize("eng");
 
   const imageUrl =
     imageInput instanceof File ? URL.createObjectURL(imageInput) : imageInput.src;
@@ -59,15 +51,15 @@ async function runImageOcr(imageInput: File | HTMLImageElement): Promise<OcrPage
   return {
     page: 1,
     text: data.text,
-    blocks: data.words?.map(w => ({
+    blocks: data.words?.map((w: any) => ({
       text: w.text,
       bbox: {
         x0: w.bbox.x0,
         y0: w.bbox.y0,
         x1: w.bbox.x1,
-        y1: w.bbox.y1
-      }
-    }))
+        y1: w.bbox.y1,
+      },
+    })),
   };
 }
 
@@ -93,9 +85,7 @@ async function runPdfOcr(file: File): Promise<OcrPageResult[]> {
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
-  const worker = (await createWorker({ logger: () => {} })) as any;
-  await worker.loadLanguage("eng");
-  await worker.initialize("eng");
+  const worker = await createWorker("eng");
 
   const pages: OcrPageResult[] = [];
 
@@ -108,15 +98,15 @@ async function runPdfOcr(file: File): Promise<OcrPageResult[]> {
     pages.push({
       page: i,
       text: data.text,
-      blocks: data.words?.map(w => ({
+      blocks: data.words?.map((w: any) => ({
         text: w.text,
         bbox: {
           x0: w.bbox.x0,
           y0: w.bbox.y0,
           x1: w.bbox.x1,
-          y1: w.bbox.y1
-        }
-      }))
+          y1: w.bbox.y1,
+        },
+      })),
     });
   }
 

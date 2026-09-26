@@ -57,7 +57,12 @@ function App() {
             throw new Error(result.error?.message || "PDF generation failed");
         }
 
-        return new Blob([result.bytes!], { type: "application/pdf" });
+        const pdfBytes = result.bytes!;
+        const blobBytes = pdfBytes.buffer.slice(
+            pdfBytes.byteOffset,
+            pdfBytes.byteOffset + pdfBytes.byteLength
+        ) as ArrayBuffer;
+        return new Blob([blobBytes], { type: "application/pdf" });
     };
 
     const handleFieldChange = (id: string, newValue: string) => {

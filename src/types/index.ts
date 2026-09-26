@@ -12,6 +12,25 @@ export interface Field {
   validator?: (value: string) => string | null;
 }
 
+export interface PdfField extends Field {
+  page?: number;
+  x?: number;
+  y?: number;
+  fontSize?: number;
+  pdfFieldName?: string;
+}
+
+export interface PdfResult {
+  ok: boolean;
+  bytes?: Uint8Array;
+  pageCount?: number;
+  error?: {
+    type: string;
+    message: string;
+    details?: string;
+  };
+}
+
 export interface UserProfile {
   name: string;
   birthDate: string;

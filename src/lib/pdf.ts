@@ -54,7 +54,7 @@ async function loadPdf(bytes: Uint8Array): Promise<PDFDocument> {
 export async function fillPdfWithFields(originalPdfBytes: Uint8Array, fields: PdfField[]): Promise<PdfResult> {
     try {
         const pdfDoc = await loadPdf(originalPdfBytes);
-        let form = null;
+        let form: any = null;
         try {
             form = pdfDoc.getForm();
         } catch {
@@ -142,7 +142,7 @@ export async function detectPdfFields(bytes: Uint8Array): Promise<any> {
         const form = pdfDoc.getForm();
         const fields = form.getFields();
 
-        return fields.map((f) => ({
+        return fields.map((f: any) => ({
             name: f.getName(),
             type: f.constructor.name,
         }));
